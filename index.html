@@ -63,39 +63,169 @@
             <button onclick="setCategory('Rocket League: Most Goals (5 Mins)')" class="category-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800 hover:text-slate-200" data-category="Rocket League: Most Goals (5 Mins)">
                 🔥 RL: Most Goals (5 Mins)
             </button>
+            <!-- Admin-Only Stamp & Shift Log Tab -->
+            <button id="stampLogTabBtn" onclick="setCategory('STAMP_LOG')" class="admin-only hidden px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-slate-900 text-amber-400 border border-amber-500/40 hover:bg-slate-800" data-category="STAMP_LOG">
+                🎟️ Stamps & Shift Log
+            </button>
         </div>
 
-        <!-- Podium Leaders -->
-        <div id="podiumLeaders" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end min-h-[180px]">
-            <!-- Populated via JavaScript -->
-        </div>
-
-        <!-- Leaderboard Table Section -->
-        <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl backdrop-blur-sm overflow-hidden shadow-xl">
-            <div class="p-6 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 id="currentCategoryTitle" class="text-lg font-bold text-white text-center sm:text-left">FIFA: Fastest Goal Leaderboard</h2>
-                </div>
-                <div class="flex items-center justify-center gap-3">
-                    <input type="text" id="searchInput" oninput="renderApp()" placeholder="Search player..." class="px-3.5 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
-                    <span id="playerCountBadge" class="px-3 py-1.5 rounded-full bg-slate-800 text-cyan-400 text-xs font-bold border border-slate-700 whitespace-nowrap">0 Players</span>
-                </div>
+        <!-- PUBLIC LEADERBOARD SECTION -->
+        <div id="leaderboardSection" class="space-y-8">
+            <!-- Podium Leaders -->
+            <div id="podiumLeaders" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end min-h-[180px]">
+                <!-- Populated via JavaScript -->
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-center border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/80">
-                            <th class="py-3.5 px-6 text-center">Rank</th>
-                            <th class="py-3.5 px-6 text-center">Player Name</th>
-                            <th class="py-3.5 px-6 text-center" id="metricHeader">Time (Seconds)</th>
-                            <th class="py-3.5 px-6 text-center admin-only hidden">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardTableBody" class="divide-y divide-slate-800/50 text-sm">
-                        <!-- Populated via JavaScript -->
-                    </tbody>
-                </table>
+            <!-- Leaderboard Table Section -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl backdrop-blur-sm overflow-hidden shadow-xl">
+                <div class="p-6 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 id="currentCategoryTitle" class="text-lg font-bold text-white text-center sm:text-left">FIFA: Fastest Goal Leaderboard</h2>
+                    </div>
+                    <div class="flex items-center justify-center gap-3">
+                        <input type="text" id="searchInput" oninput="renderApp()" placeholder="Search player..." class="px-3.5 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
+                        <span id="playerCountBadge" class="px-3 py-1.5 rounded-full bg-slate-800 text-cyan-400 text-xs font-bold border border-slate-700 whitespace-nowrap">0 Players</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/80">
+                                <th class="py-3.5 px-6 text-center">Rank</th>
+                                <th class="py-3.5 px-6 text-center">Player Name</th>
+                                <th class="py-3.5 px-6 text-center" id="metricHeader">Time (Seconds)</th>
+                                <th class="py-3.5 px-6 text-center admin-only hidden">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardTableBody" class="divide-y divide-slate-800/50 text-sm">
+                            <!-- Populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN-ONLY STAMPS & SHIFT LOG SECTION -->
+        <div id="stampLogSection" class="admin-only hidden space-y-6">
+            <div class="bg-slate-900/50 border border-amber-500/30 rounded-2xl p-6 shadow-xl space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-amber-400">Admin Stamp Tracker, Fastest Goal & Shift Comments</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">All 3 stamps unlock draw eligibility (<span class="text-emerald-400 font-bold">YES</span>). Notes stay hidden from players and help incoming shifts.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="resetStampForm()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition">
+                            Clear Form
+                        </button>
+                        <button type="button" onclick="exportStaffLogCSV()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-bold border border-amber-500/30 transition">
+                            Export Staff CSV
+                        </button>
+                    </div>
+                </div>
+
+                <form id="staffLogForm" onsubmit="handleStaffLogSubmit(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <input type="hidden" id="staffLogId">
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Gamertag *</label>
+                        <input type="text" id="logGamertag" required placeholder="e.g. Striker_MY" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Journal No.</label>
+                        <input type="text" id="logJournalNo" placeholder="e.g. J-104" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Specialised Game Mode</label>
+                        <input type="text" id="logSpecialMode" placeholder="e.g. Kickoff / Rumble" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Specialised Mode (Extra)</label>
+                        <input type="text" id="logSpecialModeExtra" placeholder="e.g. Duo / Modifier" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">FC 26: Goals (6 Mins)</label>
+                        <input type="number" step="any" id="logFcGoals" placeholder="e.g. 5" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">FC 26: Fastest Goal (Sec)</label>
+                        <input type="number" step="any" id="logFcFastest" placeholder="e.g. 14.2" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">RL: Goals (5 Mins)</label>
+                        <input type="number" step="any" id="logRlGoals" placeholder="e.g. 4" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">RL: Fastest Goal (Sec)</label>
+                        <input type="number" step="any" id="logRlFastest" placeholder="e.g. 9.8" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <!-- 3-Stamp Checkboxes & Live Draw Status -->
+                    <div class="sm:col-span-2 lg:col-span-4 bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex flex-wrap items-center gap-5 text-sm">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-slate-200 font-medium">
+                                <input type="checkbox" id="logStamp1" onchange="updateDrawPreview()" class="w-4 h-4 accent-amber-500 rounded">
+                                <span>Stamp 1 (Registration)</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-slate-200 font-medium">
+                                <input type="checkbox" id="logStamp2" onchange="updateDrawPreview()" class="w-4 h-4 accent-amber-500 rounded">
+                                <span>Stamp 2 (Achievement)</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-slate-200 font-medium">
+                                <input type="checkbox" id="logStamp3" onchange="updateDrawPreview()" class="w-4 h-4 accent-amber-500 rounded">
+                                <span>Stamp 3 (Social / Duo)</span>
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                            <span class="text-slate-400">Valid for Draw:</span>
+                            <span id="drawStatusPreview" class="px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">NO (0/3 Stamps)</span>
+                        </div>
+                    </div>
+
+                    <!-- Shift-to-Shift Admin Comment -->
+                    <div class="sm:col-span-2 lg:col-span-4">
+                        <label class="block text-xs font-semibold text-amber-400 uppercase mb-1.5">Admin Shift Comment (Hidden from Players)</label>
+                        <input type="text" id="logComment" placeholder="Notes for next shift (e.g. polite regular, re-queued for RL, check stamp 3)" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-3">
+                        <button type="submit" id="saveStaffLogBtn" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition">
+                            Save Stamp & Shift Log
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Staff Log Table -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl overflow-hidden shadow-xl">
+                <div class="p-5 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <h3 class="text-base font-bold text-white">Recorded Gamertags, Stamps & Shift Notes</h3>
+                    <span id="staffLogCountBadge" class="px-3 py-1 rounded-full bg-slate-800 text-amber-400 text-xs font-bold border border-slate-700 w-fit">0 Entries</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/80">
+                                <th class="py-3.5 px-4">Gamertag</th>
+                                <th class="py-3.5 px-4 text-center">Stamps</th>
+                                <th class="py-3.5 px-4 text-center">Draw</th>
+                                <th class="py-3.5 px-4">Fastest / Mode</th>
+                                <th class="py-3.5 px-4">Shift Comment</th>
+                                <th class="py-3.5 px-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffLogTableBody" class="divide-y divide-slate-800/50 text-sm">
+                            <!-- Populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -107,7 +237,7 @@
                 <h3 class="text-lg font-bold text-white">Crew Admin Access</h3>
                 <button onclick="closePinModal()" class="text-slate-400 hover:text-white transition">✕</button>
             </div>
-            <p class="text-xs text-slate-400">Enter your 4-digit crew PIN to unlock score recording, editing, and deletion.</p>
+            <p class="text-xs text-slate-400">Enter your 4-digit crew PIN to unlock score recording, editing, deletion, and the Stamp & Shift Log.</p>
             <form onsubmit="verifyPin(event)" class="space-y-4">
                 <input type="password" id="pinInput" maxlength="6" required placeholder="Enter PIN" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-center text-lg tracking-widest font-bold text-white focus:outline-none focus:border-cyan-500">
                 <p id="pinError" class="text-xs text-rose-400 hidden text-center font-semibold">Incorrect PIN. Access denied.</p>
@@ -129,7 +259,7 @@
             <form id="scoreForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
                 <input type="hidden" id="editScoreId">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Player Name</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">Player Name / Gamertag</label>
                     <input type="text" id="playerNameInput" required placeholder="e.g. Alex" class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-500">
                 </div>
                 <div>
@@ -155,12 +285,14 @@
 
     <script>
         const API_URL = "/api/scores";
+        const STAFF_LOG_URL = "/api/staff-logs";
         const CREW_PIN = "2026"; 
 
         let scores = [];
+        let staffLogs = [];
         let currentCategory = 'FIFA: Fastest Goal';
         
-        // isAdmin is now a standard variable, so refreshing the page auto-logs out back to public view!
+        // isAdmin is a standard variable so refreshing the page auto-logs out back to public view
         let isAdmin = false;
 
         function syncAdminUI() {
@@ -177,7 +309,6 @@
                 exportBtn.classList.add('inline-flex');
                 document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
 
-                // Add Exit Admin button if it doesn't already exist
                 if (!document.getElementById('exitAdminBtn')) {
                     const exitBtn = document.createElement('button');
                     exitBtn.id = 'exitAdminBtn';
@@ -186,13 +317,19 @@
                     exitBtn.innerText = "Exit Admin";
                     container.appendChild(exitBtn);
                 }
+                fetchStaffLogs();
             } else {
+                if (currentCategory === 'STAMP_LOG') {
+                    setCategory('FIFA: Fastest Goal');
+                }
                 btn.className = "inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm transition";
                 btnText.innerText = "Admin Login";
                 document.getElementById('lockIcon').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>`;
                 exportBtn.classList.remove('inline-flex');
                 exportBtn.classList.add('hidden');
                 document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+                document.getElementById('stampLogSection').classList.add('hidden');
+                document.getElementById('leaderboardSection').classList.remove('hidden');
 
                 const exitBtn = document.getElementById('exitAdminBtn');
                 if (exitBtn) exitBtn.remove();
@@ -250,16 +387,31 @@
         }
 
         function setCategory(category) {
+            if (category === 'STAMP_LOG' && !isAdmin) return;
             currentCategory = category;
+
             document.querySelectorAll('.category-btn').forEach(btn => {
                 if (btn.dataset.category === category) {
-                    btn.className = "category-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20";
+                    btn.className = category === 'STAMP_LOG'
+                        ? "category-btn admin-only px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20"
+                        : "category-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20";
                 } else {
-                    btn.className = "category-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800 hover:text-slate-200";
+                    btn.className = btn.dataset.category === 'STAMP_LOG'
+                        ? "category-btn admin-only px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-slate-900 text-amber-400 border border-amber-500/40 hover:bg-slate-800"
+                        : "category-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-105 bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800 hover:text-slate-200";
                 }
             });
-            document.getElementById('currentCategoryTitle').innerText = category + " Leaderboard";
-            renderApp();
+
+            if (category === 'STAMP_LOG') {
+                document.getElementById('leaderboardSection').classList.add('hidden');
+                document.getElementById('stampLogSection').classList.remove('hidden');
+                fetchStaffLogs();
+            } else {
+                document.getElementById('stampLogSection').classList.add('hidden');
+                document.getElementById('leaderboardSection').classList.remove('hidden');
+                document.getElementById('currentCategoryTitle').innerText = category + " Leaderboard";
+                renderApp();
+            }
         }
 
         function renderApp() {
@@ -273,7 +425,6 @@
                 categoryScores.sort((a, b) => b.score - a.score);
             }
 
-            // Podium Rendering (Balanced Order: 2nd, 1st, 3rd)
             const podiumDiv = document.getElementById('podiumLeaders');
             podiumDiv.innerHTML = "";
 
@@ -358,7 +509,7 @@
             document.getElementById('modalTitle').innerText = "Record New Score";
             document.getElementById('editScoreId').value = "";
             document.getElementById('playerNameInput').value = "";
-            document.getElementById('gameCategoryInput').value = currentCategory;
+            document.getElementById('gameCategoryInput').value = currentCategory === 'STAMP_LOG' ? 'FIFA: Fastest Goal' : currentCategory;
             document.getElementById('scoreValueInput').value = "";
             document.getElementById('scoreModal').classList.remove('hidden');
         }
@@ -422,6 +573,156 @@
             }
         }
 
+        // --- ADMIN STAMPS & SHIFT LOG FUNCTIONS ---
+        function updateDrawPreview() {
+            const s1 = document.getElementById('logStamp1').checked;
+            const s2 = document.getElementById('logStamp2').checked;
+            const s3 = document.getElementById('logStamp3').checked;
+            const count = [s1, s2, s3].filter(Boolean).length;
+            const badge = document.getElementById('drawStatusPreview');
+
+            if (count === 3) {
+                badge.textContent = "YES (3/3 Stamps)";
+                badge.className = "px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+            } else {
+                badge.textContent = `NO (${count}/3 Stamps)`;
+                badge.className = "px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30";
+            }
+        }
+
+        function resetStampForm() {
+            document.getElementById('staffLogForm').reset();
+            document.getElementById('staffLogId').value = "";
+            document.getElementById('saveStaffLogBtn').innerText = "Save Stamp & Shift Log";
+            updateDrawPreview();
+        }
+
+        async function fetchStaffLogs() {
+            if (!isAdmin) return;
+            try {
+                const res = await fetch(STAFF_LOG_URL);
+                staffLogs = await res.json();
+                renderStaffLogs();
+            } catch (err) {
+                console.error("Error fetching staff logs:", err);
+            }
+        }
+
+        function renderStaffLogs() {
+            const tbody = document.getElementById('staffLogTableBody');
+            const badge = document.getElementById('staffLogCountBadge');
+            badge.innerText = `${staffLogs.length} ${staffLogs.length === 1 ? 'Entry' : 'Entries'}`;
+
+            if (!staffLogs || staffLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-500">No stamp or shift log entries recorded yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = staffLogs.map(log => {
+                const isEligible = log.valid_for_draw === 'YES' || (log.stamp_1 && log.stamp_2 && log.stamp_3);
+                const statsParts = [];
+                if (log.fc_goals !== null && log.fc_goals !== '') statsParts.push(`FC Goals: ${log.fc_goals}`);
+                if (log.fc_fastest !== null && log.fc_fastest !== '') statsParts.push(`FC Fastest: ${log.fc_fastest}s`);
+                if (log.rl_goals !== null && log.rl_goals !== '') statsParts.push(`RL Goals: ${log.rl_goals}`);
+                if (log.rl_fastest !== null && log.rl_fastest !== '') statsParts.push(`RL Fastest: ${log.rl_fastest}s`);
+                if (log.specialised_mode) statsParts.push(`Mode: ${log.specialised_mode}${log.specialised_mode_extra ? ` (${log.specialised_mode_extra})` : ''}`);
+
+                return `
+                    <tr class="hover:bg-slate-900/50 transition">
+                        <td class="py-3.5 px-4">
+                            <div class="font-bold text-white">${escapeHtml(log.gamertag)}</div>
+                            ${log.journal_no ? `<div class="text-xs text-slate-400">Journal: ${escapeHtml(log.journal_no)}</div>` : ''}
+                        </td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap text-xs">
+                            <span title="Stamp 1">${log.stamp_1 ? '✅' : '⬜'}</span>
+                            <span title="Stamp 2">${log.stamp_2 ? '✅' : '⬜'}</span>
+                            <span title="Stamp 3">${log.stamp_3 ? '✅' : '⬜'}</span>
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isEligible ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                                ${isEligible ? 'YES' : 'NO'}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 text-xs text-slate-300">${escapeHtml(statsParts.join(' • ') || '-')}</td>
+                        <td class="py-3.5 px-4 text-xs text-slate-300 max-w-xs">${escapeHtml(log.player_comment || '-')}</td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <button onclick="editStaffLog(${log.id})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs font-semibold mr-1.5 transition">Edit</button>
+                            <button onclick="deleteStaffLog(${log.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold transition">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function editStaffLog(id) {
+            const log = staffLogs.find(item => item.id === id);
+            if (!log) return;
+
+            document.getElementById('staffLogId').value = log.id;
+            document.getElementById('logGamertag').value = log.gamertag || '';
+            document.getElementById('logJournalNo').value = log.journal_no || '';
+            document.getElementById('logSpecialMode').value = log.specialised_mode || '';
+            document.getElementById('logSpecialModeExtra').value = log.specialised_mode_extra || '';
+            document.getElementById('logFcGoals').value = log.fc_goals ?? '';
+            document.getElementById('logFcFastest').value = log.fc_fastest ?? '';
+            document.getElementById('logRlGoals').value = log.rl_goals ?? '';
+            document.getElementById('logRlFastest').value = log.rl_fastest ?? '';
+            document.getElementById('logStamp1').checked = Boolean(log.stamp_1);
+            document.getElementById('logStamp2').checked = Boolean(log.stamp_2);
+            document.getElementById('logStamp3').checked = Boolean(log.stamp_3);
+            document.getElementById('logComment').value = log.player_comment || '';
+            document.getElementById('saveStaffLogBtn').innerText = "Update Stamp & Shift Log";
+            updateDrawPreview();
+            document.getElementById('staffLogForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function handleStaffLogSubmit(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+
+            const payload = {
+                id: document.getElementById('staffLogId').value || null,
+                gamertag: document.getElementById('logGamertag').value.trim(),
+                journal_no: document.getElementById('logJournalNo').value.trim(),
+                specialised_mode: document.getElementById('logSpecialMode').value.trim(),
+                specialised_mode_extra: document.getElementById('logSpecialModeExtra').value.trim(),
+                fc_goals: document.getElementById('logFcGoals').value,
+                fc_fastest: document.getElementById('logFcFastest').value,
+                rl_goals: document.getElementById('logRlGoals').value,
+                rl_fastest: document.getElementById('logRlFastest').value,
+                stamp_1: document.getElementById('logStamp1').checked,
+                stamp_2: document.getElementById('logStamp2').checked,
+                stamp_3: document.getElementById('logStamp3').checked,
+                player_comment: document.getElementById('logComment').value.trim()
+            };
+
+            try {
+                const res = await fetch(STAFF_LOG_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    resetStampForm();
+                    fetchStaffLogs();
+                }
+            } catch (err) {
+                console.error("Error saving staff log:", err);
+            }
+        }
+
+        async function deleteStaffLog(id) {
+            if (!isAdmin) return;
+            if (confirm("Delete this staff log entry?")) {
+                try {
+                    await fetch(`${STAFF_LOG_URL}/${id}`, { method: 'DELETE' });
+                    fetchStaffLogs();
+                } catch (err) {
+                    console.error("Error deleting staff log:", err);
+                }
+            }
+        }
+
         function exportCSV() {
             let csvContent = "data:text/csv;charset=utf-8,ID,Player Name,Game Category,Score\n";
             scores.forEach(row => {
@@ -431,6 +732,22 @@
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "spawn_point_leaderboard.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportStaffLogCSV() {
+            if (!staffLogs.length) return alert("No staff log entries to export.");
+            let csvContent = "data:text/csv;charset=utf-8,Journal No.,Gamertag,Stamp 1,Stamp 2,Stamp 3,Valid for draw?,Specialised Game Mode,Specialised Game Mode (extra),FC 26 Goals (6 Mins),FC 26 Fastest Goal (Sec),RL Goals (5 Mins),RL Fastest Goal (Sec),Player Comment\n";
+            staffLogs.forEach(r => {
+                const valid = (r.stamp_1 && r.stamp_2 && r.stamp_3) ? 'YES' : 'NO';
+                csvContent += `"${r.journal_no || ''}","${(r.gamertag || '').replace(/"/g, '""')}",${r.stamp_1 ? 'YES' : 'NO'},${r.stamp_2 ? 'YES' : 'NO'},${r.stamp_3 ? 'YES' : 'NO'},"${valid}","${(r.specialised_mode || '').replace(/"/g, '""')}","${(r.specialised_mode_extra || '').replace(/"/g, '""')}",${r.fc_goals ?? ''},${r.fc_fastest ?? ''},${r.rl_goals ?? ''},${r.rl_fastest ?? ''},"${(r.player_comment || '').replace(/"/g, '""')}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "SPAWNPOINT_STAFF_LOG.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
